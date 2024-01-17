@@ -9,7 +9,7 @@ class Income(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30), nullable=False)
     description: Mapped[str] = mapped_column(String(100))
-    amount: Mapped[int] = mapped_column(Integer, nullable=False)
+    amount: Mapped[float] = mapped_column(Integer, nullable=False)
     ####
     team_id: Mapped[int] = mapped_column(ForeignKey('team.id'))
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))

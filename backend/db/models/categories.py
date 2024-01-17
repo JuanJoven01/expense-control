@@ -8,6 +8,7 @@ class Categories(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30), nullable=False)
+    description: Mapped[str] = mapped_column(String(300), nullable=False)
     children: Mapped[List['Expenses','Income']] = relationship(back_populates="categories")
 
 
