@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from db.db import engine, Base
 
-from db.models import Users, Expenses, Income, Wallets, Teams, Categories, Users_Teams
+from db.models.models import Users, Expenses, Incomes, Wallets, Teams, Categories, Users_Teams
 
 
 from routers.users import users_router
