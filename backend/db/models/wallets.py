@@ -1,6 +1,6 @@
 from ..db import Base
-from sqlalchemy import String, Integer
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, Integer,List, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class Wallets(Base):
@@ -11,8 +11,11 @@ class Wallets(Base):
     description: Mapped[str] = mapped_column(String(100))
     balance: Mapped[int] = mapped_column(Integer, nullable=False)
     ####
-    team_id: Mapped[int] = mapped_column(Integer)
-    user_id: Mapped[int] = mapped_column(Integer)
+    children: Mapped[List['Expenses','Income']] = relationship(back_populates="wallets")
+
+    team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    parents: Mapped[List['Teams','Users']] = relationship(back_populates="wallets")
 
 
 
