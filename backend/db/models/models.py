@@ -11,8 +11,9 @@ class Categories(Base):
     name: Mapped[str] = mapped_column(String(30), nullable=False)
     description: Mapped[str] = mapped_column(String(300), nullable=False)
 
-    expenses: Mapped[List['Expenses']] = relationship(back_populates="categories")
-    income: Mapped[List['Incomes']] = relationship(back_populates="categories")
+    expenses: Mapped[List['Expenses']] = relationship(back_populates="category")
+    incomes: Mapped[List['Incomes']] = relationship(back_populates="category")
+
 
 class Expenses(Base):
     __tablename__ = 'expenses'
@@ -31,6 +32,7 @@ class Expenses(Base):
     user: Mapped['Users'] = relationship(back_populates="expenses")
     wallet: Mapped['Wallets'] = relationship(back_populates="expenses")
     category: Mapped['Categories'] = relationship(back_populates="expenses")
+
 
 class Incomes(Base):
     __tablename__ = 'incomes'
@@ -58,9 +60,10 @@ class Teams(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(15), nullable=False)
     admin: Mapped[str] = mapped_column(String(15), nullable=False)
-    expenses: Mapped[List['Expenses']] = relationship(back_populates="teams")
-    income: Mapped[List['Incomes']] = relationship(back_populates="teams")
-    wallets: Mapped[List['Wallets']] = relationship(back_populates="teams")
+    #####
+    expenses: Mapped[List['Expenses']] = relationship(back_populates="team")
+    incomes: Mapped[List['Incomes']] = relationship(back_populates="team")
+    wallets: Mapped[List['Wallets']] = relationship(back_populates="team")
     users: Mapped[List['Users']] = relationship(secondary='users_teams' ,back_populates="teams")
 
 
@@ -71,10 +74,11 @@ class Users(Base):
     name: Mapped[str] = mapped_column(String(15), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(80), nullable=False)
 
-    expenses: Mapped[List['Expenses']] = relationship(back_populates="users")
-    income: Mapped[List['Incomes']] = relationship(back_populates="users")
-    wallets: Mapped[List['Wallets']] = relationship(back_populates="users")
+    expenses: Mapped[List['Expenses']] = relationship(back_populates="user")
+    incomes: Mapped[List['Incomes']] = relationship(back_populates="user")
+    wallets: Mapped[List['Wallets']] = relationship(back_populates="user")
     teams: Mapped[List['Teams']] = relationship(secondary='users_teams' ,back_populates="users")
+
 
 class Wallets(Base):
     __tablename__ = 'wallets'
@@ -84,13 +88,13 @@ class Wallets(Base):
     description: Mapped[str] = mapped_column(String(100))
     balance: Mapped[float] = mapped_column(Float, nullable=False)
     ####
-    expenses: Mapped[List['Expenses']] = relationship(back_populates="wallets")
-    income: Mapped[List['Incomes']] = relationship(back_populates="wallets")
-
     team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'))
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+
     team: Mapped['Teams'] = relationship(back_populates="wallets")
     user: Mapped['Users'] = relationship(back_populates="wallets")
+    expenses: Mapped[List['Expenses']] = relationship(back_populates="wallet")
+    incomes: Mapped[List['Incomes']] = relationship(back_populates="wallet")
 
 
 Users_Teams = Table(

@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
 
-class Income (BaseModel):
+class Incomes (BaseModel):
     name: str = Field(max_length=30, min_length=4)
     description: Optional[str] = Field(max_length=300, min_length=4)
     date: Optional[datetime] = Field(default=datetime.now()) ##

@@ -1,17 +1,18 @@
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import logging
 
+from dotenv import dotenv_values, load_dotenv
+load_dotenv(override=False)
+environment = dotenv_values(".env")
 
-# dbname = os.environ.get('DB_NAME')
-dbname = 'postgres'
-user = os.environ.get('DB_USER')
-password = os.environ.get('DB_PASSWORD')
-# host = os.environ.get('DB_HOST')
-host = 'localhost'
-port = os.environ.get('DB_PORT')
+dbname = environment["DB_NAME"]
+user = environment["DB_USER"]
+password = environment["DB_PASSWORD"]
+host = environment["DB_HOST"]
+port = environment["DB_PORT"]
+
 
 
 logging.basicConfig()
