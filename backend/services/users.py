@@ -33,7 +33,6 @@ def check_password_and_rehash_if_needed(username: str, plain_password: str):
 
 def new_user (username: str, password: str):
     try:
-        
         with Session() as session:
             user = Users(name=username, password=hash_password(password))
             session.add(user)
