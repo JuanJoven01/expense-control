@@ -1,5 +1,6 @@
 from jose import jwt
 
+from fastapi import HTTPException, status, Request
 from fastapi.security import HTTPBearer
 
 from dotenv import dotenv_values, load_dotenv
@@ -27,12 +28,18 @@ class JWTBearer(HTTPBearer):
     def __init__(self, auto_error: bool = True):
         super(JWTBearer, self).__init__(auto_error=auto_error)
         
-    async def __call__(self, request):
+    async def __call__(self, request:Request):
         credentials = await super(JWTBearer, self).__call__(request)
         if credentials:
             if not validate_jwt_token(credentials.credentials):
-                return False
-            return credentials.credentials
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid JWT token",
+                )
+            return jwt.decode(credentials.credentials, environment["SECRET_KEY"])
         else:
-            return False
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="JWT token not found",
+            )
     

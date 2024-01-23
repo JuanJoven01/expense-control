@@ -21,8 +21,8 @@ def verify_and_rehash_password(plain_password: str, hashed_password: str):
 
 def check_password_and_rehash_if_needed(username: str, plain_password: str):
     with Session() as session:
-        user = session.query(Users).filter_by(name=username).first()
-        if user is None:
+        user = find_user_by_name(username)
+        if not user:
             return False
         password_matches, password_needs_rehash = verify_and_rehash_password(plain_password, user.password)
         if password_matches and password_needs_rehash:
@@ -48,3 +48,10 @@ def login_get_token (username: str, password: str):
         return logged
     except Exception as e:
         raise e
+
+def find_user_by_name(username: str):
+    with Session() as session:
+        user = session.query(Users).filter_by(name=username).first()
+        if user is None:
+            return False
+        return user
