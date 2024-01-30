@@ -42,9 +42,6 @@ def create_new_team (admin: str, team_name: str, user_id: int):
             insert_smtp = Users_Teams.insert().values(**user_team_data)
             session.execute(insert_smtp)
             session.commit()
-            # user_team = Users_Teams(user_id= user_id, team_id=team_id, status='accepted')
-            # session.add(user_team)
-            # session.commit()
         
         return {'message': 'Team created'}
     except Exception as e:
@@ -90,9 +87,8 @@ def create_invitation(second_username: str, team_id:str):
         raise e
 
 def get_pending_invitations (user_id: int):
-    print('into '*10)
     try:
-        print('into '*10)
+        __delete_duplicated_invitations__()
         with Session() as session:
             query = (
                 select(Teams)
@@ -107,6 +103,45 @@ def get_pending_invitations (user_id: int):
     except Exception as e:
         raise e
 
+def __delete_duplicated_invitations__():
+    '''
+    This function get the UsersTeams info, verify if get duplicated 
+    invitations an remove that from the db
+    '''
+    try:
+        with Session() as session:
+            query = (
+                select(Users_Teams)
+                .where(Users_Teams.c.status == 'pending')
+                    )
+            invitations = session.execute(query).all()
+        ######    
+        to_remove = __get_duplicated__(invitations)
+        print(to_remove)
+        with Session() as session:
+            for item in to_remove:
+                delete_query = Users_Teams.delete().where(Users_Teams.c.id == item)
+                session.execute(delete_query)
+                session.commit()   
+    except Exception as e:
+        raise e
+
+def __get_duplicated__(list_with_repeated: list):
+    dicts_of_invitations = [{str([item[1], item[2]]):item[0] } for item in list_with_repeated]
+    dict_with_repeated = {}
+    for dictionary in dicts_of_invitations:
+        for key, value in dictionary.items():
+            if key in dict_with_repeated:
+                dict_with_repeated[key].append(value)
+            else:
+                dict_with_repeated[key] = [value]
+    to_remove= []
+    for value in dict_with_repeated.values():
+        if len(value) > 1:
+            for i in range(len(value)-1):
+                to_remove.append(value[i])
+    return to_remove
 
 def change_team_admin(new_admin: str, team_id):
+
     pass

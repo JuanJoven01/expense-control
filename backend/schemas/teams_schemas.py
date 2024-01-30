@@ -25,3 +25,14 @@ class Username_and_team_id(BaseModel):
                     "team_id": 2
                 }
             }
+
+class TeamName (BaseModel):
+    name: Optional [str] = Field(None, max_length=15, min_length=4)
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "name": "myfamily"
+            }
+        }

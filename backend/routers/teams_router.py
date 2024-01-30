@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from schemas.teams_schemas import Teams, Username_and_team_id
+from schemas.teams_schemas import Teams, Username_and_team_id, TeamName
 
 from services.teams_services import create_new_team, get_my_teams, create_invitation, get_pending_invitations
 
@@ -11,7 +11,7 @@ teams_router = APIRouter()
 
 
 @teams_router.post("/teams/new", tags=["teams"], dependencies=[Depends(JWTBearer())])
-def new_team(team: Teams, jwt_payload = Depends(JWTBearer())):
+def new_team(team: TeamName, jwt_payload = Depends(JWTBearer())):
     '''
     This endpoint create a new team and defines the creator as admin
     
@@ -60,9 +60,6 @@ def invite_user_to_team(user_team:Username_and_team_id):
 def get_invitations(jwt_payload = Depends(JWTBearer())):
     try:
         user_id = jwt_payload['user_id']
-        print('*'*20)
-        print(user_id)
-        print(type(user_id))
         invitations = get_pending_invitations(user_id)
         return invitations
         
