@@ -7,8 +7,8 @@ from db.models.models import Users, Expenses, Incomes, Wallets, Teams, Categorie
 
 from middlewares.error_handler import ErrorHandler
 
-from routers.users import users_router
-from routers.teams import teams_router
+from routers.users_router import users_router
+from routers.teams_router import teams_router
 
 
 app = FastAPI()

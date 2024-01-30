@@ -58,7 +58,7 @@ class Teams(Base):
     __tablename__ = 'teams'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(15), nullable=False)
+    name: Mapped[str] = mapped_column(String(15), nullable=False, unique=True)
     admin: Mapped[str] = mapped_column(String(15), nullable=False)
     #####
     expenses: Mapped[List['Expenses']] = relationship(back_populates="team")
@@ -100,6 +100,7 @@ class Wallets(Base):
 Users_Teams = Table(
     'users_teams',
     Base.metadata,
+    Column('id', Integer, primary_key=True),
     Column('team_id', ForeignKey('teams.id')),
     Column('user_id', ForeignKey('users.id')),
     Column('status', String(15), nullable=False, default='pending')

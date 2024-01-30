@@ -1,9 +1,8 @@
 from fastapi import APIRouter
 
-from schemas.users import User
+from schemas.users_schemas import User
 
-from services.users import new_user
-from services.users import login_get_token
+from services.users_services import new_user, login_get_token, find_user_by_name
 
 users_router = APIRouter()
 
@@ -13,6 +12,8 @@ def signup(user: User):
     try:
         username = user.name
         password = user.password
+        if find_user_by_name(username):
+            return {'error': 'invalid username, try another'}
         new_user(username, password)
         return {"message": "User created"}
     except Exception as e:
@@ -23,9 +24,9 @@ def login(user: User):
     try:
         username = user.name
         password = user.password
-        logged = login_get_token(username, password)
-        if logged:
-            return logged
+        token = login_get_token(username, password)
+        if token:
+            return token
         else:
             return {"error": "Invalid credentials"}
     except Exception as e:

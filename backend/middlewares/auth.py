@@ -7,10 +7,13 @@ from dotenv import dotenv_values, load_dotenv
 load_dotenv(override=False)
 environment = dotenv_values(".env")
 
-def get_jwt_token(user_validated: bool, username: str):
+def get_jwt_token(user_validated: bool, username: str, user_id: int):
     secret_key = environment["SECRET_KEY"]
     algorithm = environment["ALGORITHM"]
-    body = {"user": username}
+    body = {
+        "user": username,
+        "user_id": user_id
+        }
     if user_validated:
         return jwt.encode(body, secret_key, algorithm=algorithm)
     else:
