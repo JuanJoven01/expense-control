@@ -36,3 +36,14 @@ class TeamName (BaseModel):
                 "name": "myfamily"
             }
         }
+
+class TeamId (BaseModel):
+    id: int
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "id": "22"
+            }
+}

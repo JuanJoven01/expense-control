@@ -87,6 +87,11 @@ def create_invitation(second_username: str, team_id:str):
         raise e
 
 def get_pending_invitations (user_id: int):
+    '''
+    Filter in Users_Teams the pending invitations with the user_id
+    if have repeated invitations, remove the duplicated,
+    return the teams
+    '''
     try:
         __delete_duplicated_invitations__()
         with Session() as session:
@@ -117,7 +122,6 @@ def __delete_duplicated_invitations__():
             invitations = session.execute(query).all()
         ######    
         to_remove = __get_duplicated__(invitations)
-        print(to_remove)
         with Session() as session:
             for item in to_remove:
                 delete_query = Users_Teams.delete().where(Users_Teams.c.id == item)
@@ -142,6 +146,34 @@ def __get_duplicated__(list_with_repeated: list):
                 to_remove.append(value[i])
     return to_remove
 
-def change_team_admin(new_admin: str, team_id):
+def accept_invitation(user_id: int, team_id: int):
+    '''
+    With the user_id and team_id, get the Users_Teams id
+    changes the status to accept
+    '''
+    try:
+        invitation_id = __get_invitation_id__(user_id, team_id)
+        with Session() as session:
+            update_query = (
+                Users_Teams.update()
+                .where(Users_Teams.c.id == invitation_id)
+                .values(status='accepted')
+            )
+            session.execute(update_query)
+            session.commit()
+            return {'message':'Invitation Accepted'}
+    except Exception as e:
+        raise e
 
-    pass
+def __get_invitation_id__(user_id: int, team_id: int):
+    try:
+        with Session() as session:
+            query = (
+                select(Users_Teams)
+                .where(Users_Teams.c.team_id == team_id)
+                .where(Users_Teams.c.user_id == user_id)
+                )
+            
+            return session.execute(query).scalar()
+    except Exception as e:
+        raise e 
