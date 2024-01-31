@@ -79,10 +79,3 @@ def accept_invitations(team_id: TeamId,jwt_payload = Depends(JWTBearer())):
     except Exception as e:
         e
 
-
-@teams_router.patch('/teams/change-admin', tags=['teams'],dependencies=[Depends(JWTBearer())])
-def update_team_admin(team: Teams, jwt_payload  = Depends(JWTBearer())):
-    try:
-        pass
-    except Exception as e:
-        raise e
