@@ -9,6 +9,7 @@ from middlewares.error_handler import ErrorHandler
 
 from routers.users_router import users_router
 from routers.teams_router import teams_router
+from routers.wallet_router import wallet_router
 
 
 app = FastAPI()
@@ -19,6 +20,7 @@ app.add_middleware(ErrorHandler)
 
 app.include_router(users_router)
 app.include_router(teams_router)
+app.include_router(wallet_router)
 
 
 Base.metadata.create_all(bind=engine)

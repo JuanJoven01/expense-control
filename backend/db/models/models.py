@@ -9,7 +9,7 @@ class Categories(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30), nullable=False)
-    description: Mapped[str] = mapped_column(String(300), nullable=False)
+    description: Mapped[str] = mapped_column(String(300), nullable=True)
 
     expenses: Mapped[List['Expenses']] = relationship(back_populates="category")
     incomes: Mapped[List['Incomes']] = relationship(back_populates="category")
@@ -20,11 +20,11 @@ class Expenses(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30), nullable=False)
-    description: Mapped[str] = mapped_column(String(100))
+    description: Mapped[str] = mapped_column(String(100),nullable=True),
     amount: Mapped[float] = mapped_column(Float, nullable=False)
     ####
-    team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'))
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'), nullable=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
     wallet_id: Mapped[int] = mapped_column(ForeignKey('wallets.id'))
     category_id: Mapped[int] = mapped_column(ForeignKey('categories.id'))
 
@@ -39,11 +39,11 @@ class Incomes(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30), nullable=False)
-    description: Mapped[str] = mapped_column(String(100))
+    description: Mapped[str] = mapped_column(String(100), nullable=True)
     amount: Mapped[float] = mapped_column(Float, nullable=False)
     ####
-    team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'))
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'), nullable=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
     wallet_id: Mapped[int] = mapped_column(ForeignKey('wallets.id'))
     category_id: Mapped[int] = mapped_column(ForeignKey('categories.id'))
 
@@ -85,11 +85,11 @@ class Wallets(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30), nullable=False)
-    description: Mapped[str] = mapped_column(String(100))
+    description: Mapped[str] = mapped_column(String(100), nullable=True)
     balance: Mapped[float] = mapped_column(Float, nullable=False)
     ####
-    team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'))
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'), nullable=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
 
     team: Mapped['Teams'] = relationship(back_populates="wallets")
     user: Mapped['Users'] = relationship(back_populates="wallets")

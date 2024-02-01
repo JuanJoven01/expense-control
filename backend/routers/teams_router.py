@@ -74,8 +74,8 @@ def get_invitations(jwt_payload = Depends(JWTBearer())):
 def accept_invitations(team_id: TeamId,jwt_payload = Depends(JWTBearer())):
     try:
         user_id = jwt_payload['user_id']
-        prov = accept_invitation(user_id,team_id.id)
-        return prov
+        invitation = accept_invitation(user_id,team_id.id)
+        return invitation
     except Exception as e:
         e
 

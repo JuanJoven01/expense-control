@@ -1,4 +1,4 @@
-from sqlalchemy import select, insert
+from sqlalchemy import select
 
 from fastapi.responses import JSONResponse
 
