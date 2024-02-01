@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 import json
 from schemas.wallets_schemas import Wallets
 
-from services.wallets_services import get_my_wallets_and_create_default, get_team_wallets_and_create_default, new_own_wallet, new_team_wallet
+from services.wallets_services import get_my_wallets_and_create_default, get_team_wallets_and_create_default, new_own_wallet, new_team_wallet_service
 from services.teams_services import __verify_if_user_in_teams__
 
 wallet_router = APIRouter ()
@@ -43,12 +43,14 @@ def new_wallet(wallet:Wallets, jwt_payload=Depends(JWTBearer())):
 @wallet_router.post('/wallets-new-team/{team_id}', tags=['wallets'], dependencies=[Depends(JWTBearer())])
 def new_team_wallet(wallet:Wallets, team_id , jwt_payload =Depends(JWTBearer())):
     try:
-        username = jwt_payload['name']
+        username = jwt_payload['user']
         name = wallet.name
         description = wallet.description or ''
         balance = wallet.balance or 0.0
         if __verify_if_user_in_teams__(username, team_id):
-            return new_team_wallet(team_id, name, description, balance)
+            print('*'*30)
+            print('is near the service')
+            return new_team_wallet_service(team_id, name, description, balance)
         else:
             return {'error': 'Invalid team_id, maybe you dont belong to the team'}
         

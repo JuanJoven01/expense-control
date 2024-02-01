@@ -58,8 +58,10 @@ def new_own_wallet(user_id: int, name:str, description:str = '', balance:float =
     except Exception as e:
         raise e
     
-def new_team_wallet(team_id:int, name:str, description:str = '', balance: float = 0.0):
+def new_team_wallet_service(team_id:int, name:str, description:str = '', balance: float = 0.0):
     try:
+        print('*'*30)
+        print('is into the service')
         with Session() as session:
             wallet = Wallets(team_id=team_id, name=name, description=description, balance=balance)
             session.add(wallet)

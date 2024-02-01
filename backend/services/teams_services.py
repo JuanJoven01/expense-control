@@ -184,8 +184,9 @@ def __verify_if_user_in_teams__(username:str, team_id:int):
     my_teams = get_my_teams(username)
     my_teams_str = my_teams.body.decode('utf-8')
     my_teams_dict = json.loads(my_teams_str)
-    for team in my_teams_dict:
-        if team['team_id'] == team_id:
+    for team in my_teams_dict['teams']:
+        if int(team['team_id']) == int(team_id):
             return True
+    print('False')
     return False
 
