@@ -2,6 +2,8 @@ from sqlalchemy import select
 
 from fastapi.responses import JSONResponse
 
+import json
+
 from db.models.models import Teams, Users_Teams, Users
 from db.db import Session
 
@@ -177,3 +179,13 @@ def __get_invitation_id__(user_id: int, team_id: int):
             return session.execute(query).scalar()
     except Exception as e:
         raise e 
+
+def __verify_if_user_in_teams__(username:str, team_id:int):
+    my_teams = get_my_teams(username)
+    my_teams_str = my_teams.body.decode('utf-8')
+    my_teams_dict = json.loads(my_teams_str)
+    for team in my_teams_dict:
+        if team['team_id'] == team_id:
+            return True
+    return False
+
