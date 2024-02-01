@@ -4,11 +4,9 @@ from datetime import datetime
 
 class Incomes (BaseModel):
     name: str = Field(max_length=30, min_length=4)
-    description: Optional[str] = Field(max_length=300, min_length=4)
-    date: Optional[datetime] = Field(default=datetime.now()) ##
+    description: Optional[str] = Field(max_length=300, min_length=4, default=None)
+    date: Optional[datetime] = Field(default=datetime.now()) 
     amount: float = Field(gt=0)
-    user_id: Optional[int]
-    team_id: Optional[int]
     wallet_id: int
     category_id: int
     

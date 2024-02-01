@@ -10,9 +10,11 @@ class Categories(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30), nullable=False)
     description: Mapped[str] = mapped_column(String(300), nullable=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
 
     expenses: Mapped[List['Expenses']] = relationship(back_populates="category")
     incomes: Mapped[List['Incomes']] = relationship(back_populates="category")
+    user: Mapped['Users'] = relationship(back_populates="category")
 
 
 class Expenses(Base):
@@ -78,6 +80,7 @@ class Users(Base):
     incomes: Mapped[List['Incomes']] = relationship(back_populates="user")
     wallets: Mapped[List['Wallets']] = relationship(back_populates="user")
     teams: Mapped[List['Teams']] = relationship(secondary='users_teams' ,back_populates="users")
+    Categories: Mapped[List['Categories']] = relationship(back_populates="user")
 
 
 class Wallets(Base):
