@@ -17,7 +17,7 @@ def get_my_wallets(jwt_payload = Depends(JWTBearer())):
     except Exception as e:
         raise e
 
-@wallet_router.get('/wallet/get-team/{team_id}', tags=['wallets'], dependencies=[Depends(JWTBearer())])
+@wallet_router.get('/wallet/teams/get/{team_id}', tags=['wallets'], dependencies=[Depends(JWTBearer())])
 def get_team_wallet(team_id:int, jwt_payload = Depends(JWTBearer())):
     try:
         username = jwt_payload['user']
@@ -40,7 +40,7 @@ def new_wallet(wallet:Wallets, jwt_payload=Depends(JWTBearer())):
     except Exception as e:
         raise e
 
-@wallet_router.post('/wallets-new-team/{team_id}', tags=['wallets'], dependencies=[Depends(JWTBearer())])
+@wallet_router.post('/wallets/teams/new/{team_id}', tags=['wallets'], dependencies=[Depends(JWTBearer())])
 def new_team_wallet(wallet:Wallets, team_id , jwt_payload =Depends(JWTBearer())):
     try:
         username = jwt_payload['user']

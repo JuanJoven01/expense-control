@@ -13,3 +13,16 @@ class Categories (BaseModel):
                 "description": "Food expenses"
             }
         }
+    
+class UpdateCategories (BaseModel):
+    name: str = Field(max_length=30, min_length=4, default=None)
+    description: Optional[str] = Field(max_length=300, min_length=4, default=None)
+    id: int
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "name": "Food",
+                "description": "Food expenses"
+            }
+        }
