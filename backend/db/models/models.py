@@ -1,5 +1,5 @@
 from ..db import Base
-from sqlalchemy import String, ForeignKey, Integer, Table, Column, Float
+from sqlalchemy import String, ForeignKey, Integer, Table, Column, Float, DateTime
 from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -26,6 +26,7 @@ class Expenses(Base):
     name: Mapped[str] = mapped_column(String(30), nullable=False)
     description: Mapped[str] = mapped_column(String(100),nullable=True),
     amount: Mapped[float] = mapped_column(Float, nullable=False)
+    datetime= mapped_column(DateTime)
     ####
     team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'), nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
@@ -45,6 +46,7 @@ class Incomes(Base):
     name: Mapped[str] = mapped_column(String(30), nullable=False)
     description: Mapped[str] = mapped_column(String(100), nullable=True)
     amount: Mapped[float] = mapped_column(Float, nullable=False)
+    datetime= mapped_column(DateTime)
     ####
     team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'), nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
