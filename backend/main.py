@@ -12,6 +12,8 @@ from routers.teams_router import teams_router
 from routers.wallet_router import wallet_router
 from routers.categories_router import categories_router
 from routers.incomes_router import incomes_router
+from routers.expenses_router import expenses_router
+from routers.reporter_router import reporter_router
 
 
 app = FastAPI()
@@ -25,6 +27,8 @@ app.include_router(teams_router)
 app.include_router(wallet_router)
 app.include_router(categories_router)
 app.include_router(incomes_router)
+app.include_router(expenses_router)
+app.include_router(reporter_router)
 
 
 Base.metadata.create_all(bind=engine)

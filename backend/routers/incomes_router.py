@@ -46,10 +46,10 @@ def update_income(income: IncomesUpdate, jwt_payload =  Depends(JWTBearer())):
     except Exception as e:
         return {'service error': str(e)}
     
-@incomes_router.delete('/incomes/delete/{id}', tags=['incomes'],dependencies=[Depends(JWTBearer())])
-def delete_income(id: int, jwt_payload = Depends(JWTBearer())):
+@incomes_router.delete('/incomes/delete/{iid}', tags=['incomes'],dependencies=[Depends(JWTBearer())])
+def delete_income(iid: int, jwt_payload = Depends(JWTBearer())):
     try:
-        return delete_own_income(id, jwt_payload['user_id'])
+        return delete_own_income(iid, jwt_payload['user_id'])
     except Exception as e:
         return {'router error': str(e)}
     
@@ -57,8 +57,7 @@ def delete_income(id: int, jwt_payload = Depends(JWTBearer())):
 def get_teams_incomes(team_id:int, jwt_payload = Depends(JWTBearer())):
     try:
         username = jwt_payload['user']
-        user_id = jwt_payload['user_id']
-        return get_team_incomes(username, user_id, team_id)
+        return get_team_incomes(username, team_id)
     except Exception as e:
         return {'router error': str(e)}
     

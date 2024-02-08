@@ -24,7 +24,7 @@ class Expenses(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30), nullable=False)
-    description: Mapped[str] = mapped_column(String(100),nullable=True),
+    description: Mapped[str] = mapped_column(String(100), nullable=True)
     amount: Mapped[float] = mapped_column(Float, nullable=False)
     datetime= mapped_column(DateTime)
     ####
