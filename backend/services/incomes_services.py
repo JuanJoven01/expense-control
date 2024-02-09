@@ -10,6 +10,8 @@ from services.sql_services import to_dict
 
 from services.teams_services import __verify_if_user_in_teams__
 
+from services.wallets_services import __update_wallet_balance__
+
 def get_own_incomes(user_id:int):
     try:
         with Session() as session:
@@ -29,6 +31,7 @@ def new_own_income(user_id:int, name:str, description:str, datetime: datetime, a
             income = Incomes(name= name, description=description, amount= amount, datetime= datetime, user_id=user_id, wallet_id=wallet_id,category_id=category_id)
             session.add(income)
             session.commit()
+        __update_wallet_balance__(False, wallet_id, amount)
         return  {'message':'income created'}
     except Exception as e:
         return {'service error':str(e)}
@@ -45,6 +48,8 @@ def update_own_income(user_id:int, name:str, description:str, datetime: datetime
                         .where(Incomes.id == income_id)
                     )
                     income_to_update = session.execute(update_query).scalar()
+                    value_to_update = amount - income_to_update.amount
+                    __update_wallet_balance__(False, wallet_id, value_to_update)
                     income_to_update.name = name
                     income_to_update.description = description
                     income_to_update.datetime = datetime
@@ -67,7 +72,7 @@ def delete_own_income(income_id:int, user_id:int):
                     income = session.get(Incomes, income_id)
                     session.delete(income)
                     session.commit()
-                    return {'message':'income removed'}
+                return {'message':'income removed'}
         return {'error': "looks like it's not your income"}
                     
     except Exception as e:
@@ -96,7 +101,8 @@ def new_team_incomes(username:str, team_id:int, income:dict):
                 new_income = Incomes(name=income.name, description=income.description, amount=income.amount, datetime=income.date, team_id=team_id, wallet_id=income.wallet_id, category_id=income.category_id)
                 session.add(new_income)
                 session.commit()
-                return {'message':'income added'}
+            __update_wallet_balance__(False, income.wallet_id, income.amount )
+            return {'message':'income added'}
         return {'error': 'looks like you are not bellow to the team'}    
 
     except Exception as e:
@@ -113,6 +119,8 @@ def update_team_incomes(username: str, team_id: int, income:dict):
                         .where(Incomes.id == income.income_id)
                     )
                     income_to_update = session.execute(update_query).scalar()
+                    value_to_update = income.amount - income_to_update.amount
+                    __update_wallet_balance__(False, income.wallet_id, value_to_update)
                     income_to_update.name = income.name
                     income_to_update.description = income.description
                     income_to_update.amount = income.amount
@@ -120,7 +128,7 @@ def update_team_incomes(username: str, team_id: int, income:dict):
                     income_to_update.wallet_id = income.wallet_id
                     income_to_update.category_id = income.category_id
                     session.commit()
-                    return {'message': 'income updated'}
+                return {'message': 'income updated'}
         return {'error': "looks like it's not your income"} 
 
     except Exception as e:

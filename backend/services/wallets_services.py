@@ -2,6 +2,7 @@ from sqlalchemy import select
 
 from fastapi.responses import JSONResponse
 
+from services.sql_services import to_dict
 
 from db.models.models import Wallets, Users
 from db.db import Session
@@ -67,3 +68,13 @@ def new_team_wallet_service(team_id:int, name:str, description:str = '', balance
             return {'message': 'Wallet created'}
     except Exception as e:
         raise e
+
+def __update_wallet_balance__(is_expense:bool, wallet_id:int, value:bool):
+    try:
+        if is_expense: value = 0-value
+        with Session() as session:
+            wallet = session.get(Wallets, wallet_id)
+            wallet.balance = wallet.balance + value
+            session.commit()
+    except Exception as e:
+        return {'service error': str(e)}
